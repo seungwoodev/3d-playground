@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "domutils": "^2.7.0"
+  }
+}
