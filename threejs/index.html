@@ -92,6 +92,13 @@
       const sy = 0.5
       const sz = 0.5
 
+      const listener = new THREE.AudioListener();
+      const sound = new THREE.Audio( listener );
+      const audioLoader = new THREE.AudioLoader();
+
+      let isPlayingMusic1 = false
+      let isPlayingMusic2 = false
+
       initThree()
       initCannon()
       initPointerLock()
@@ -135,6 +142,7 @@
         spotlight.shadow.camera.near = 20
         spotlight.shadow.camera.far = 50
         spotlight.shadow.camera.fov = 40
+        camera.add( listener );
 
         spotlight.shadow.bias = -0.001
         spotlight.shadow.mapSize.width = 2048
@@ -174,13 +182,23 @@
             bevelSegments: 5,  
 
           });
-          const musicMaterial = new THREE.MeshPhongMaterial({ color: 0x97df5e });
-          music = new THREE.Mesh(musicGeometry, musicMaterial);
+          const musicMaterial1 = new THREE.MeshPhongMaterial({ color: 0x97df5e });
+          music = new THREE.Mesh(musicGeometry, musicMaterial1);
           music.position.x = 0
           music.position.y = 2
           music.position.z = -30
           scene.add(music);
-          console.log('music position x y z', music.position.x, music.position.y, music.position.z)
+          console.log('music1 position x y z', music.position.x, music.position.y, music.position.z)
+
+          const musicMaterial2 = new THREE.MeshPhongMaterial({ color: 0xDB9CFF });
+          music = new THREE.Mesh(musicGeometry, musicMaterial2);
+          music.position.x = 15
+          music.position.y = 2
+          music.position.z = -30
+          scene.add(music);
+          console.log('music2 position x y z', music.position.x, music.position.y, music.position.z)
+
+
 
         });
 
@@ -264,14 +282,68 @@
         const height = 4.0;  
         const depth = 1.0;
         const musicShape = new CANNON.Box(new CANNON.Vec3(width/2, height/2, depth/2))
-        const musicBody = new CANNON.Body({ mass: 0 })
+        const musicBody1 = new CANNON.Body({ mass: 0 })
         const musicQuaternion = new CANNON.Quaternion();
         musicQuaternion.setFromAxisAngle(new CANNON.Vec3(0, 0, 1), 0)
-        musicBody.addShape(musicShape, new CANNON.Vec3(), musicQuaternion)
-        musicBody.position.x = 5
-        musicBody.position.y = 3.5
-        musicBody.position.z = -30
-        world.addBody(musicBody)
+        musicBody1.addShape(musicShape, new CANNON.Vec3(), musicQuaternion)
+        musicBody1.position.x = 5
+        musicBody1.position.y = 3.5
+        musicBody1.position.z = -30
+        musicBody1.addEventListener('collide', (event) => {
+          console.log('Collided with body:', event.body)
+          console.log('Contact between bodies:', event.contact)
+          if (isPlayingMusic1) {
+            sound.stop()
+            isPlayingMusic1 = false;
+            return
+          }
+          if (sound.isPlaying) {
+            sound.stop()
+          }
+          audioLoader.load( './music/방탄소년단_Dynamite.mp3', function( buffer ) {
+            sound.setBuffer( buffer );
+            sound.setLoop( true );
+            sound.setVolume( 0.5 );
+            sound.play();
+            isPlayingMusic1 = true;
+            isPlayingMusic2 = false;
+          });
+
+        })
+        world.addBody(musicBody1)
+
+
+        const musicBody2 = new CANNON.Body({ mass: 0 })
+        musicBody2.addShape(musicShape, new CANNON.Vec3(), musicQuaternion)
+        musicBody2.position.x = 20
+        musicBody2.position.y = 3.5
+        musicBody2.position.z = -30
+        musicBody2.addEventListener('collide', (event) => {
+          console.log('Collided with body:', event.body)
+          console.log('Contact between bodies:', event.contact)
+          if (isPlayingMusic2) {
+            sound.stop()
+            isPlayingMusic2 = false;
+            return
+          }
+          if (sound.isPlaying) {
+            sound.stop()
+          }
+          audioLoader.load( './music/DEAMN_Sign.mp3', function( buffer ) {
+            sound.setBuffer( buffer );
+            sound.setLoop( true );
+            sound.setVolume( 0.5 );
+            sound.play();
+            isPlayingMusic2 = true;
+            isPlayingMusic1 = false;
+
+
+
+          });
+
+        })
+        world.addBody(musicBody2)
+
 
 
         // Voxels
@@ -308,7 +380,7 @@
         }
 
         // The shooting balls
-        const shootVelocity = 15
+        const shootVelocity = 100
         const ballShape = new CANNON.Sphere(0.2)
         const ballGeometry = new THREE.SphereBufferGeometry(ballShape.radius, 32, 32)
 
