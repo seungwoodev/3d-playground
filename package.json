@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "domutils": "^2.7.0"
+    "domutils": "^2.7.0",
+    "simplex-noise": "^2.4.0"
   }
 }

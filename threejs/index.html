@@ -42,7 +42,7 @@
       <br />
       (W,A,S,D = Move, SPACE = Jump, MOUSE = Look, CLICK = Shoot)
     </div>
-    <script src="js/bunny.js"></script>
+    <script src="js/simplex-noise.js"></script>
 
     <script type="module">
       import * as CANNON from './dist/cannon-es.js'
@@ -58,8 +58,9 @@
       // three.js variables
       let camera, scene, renderer, stats
       let material
-      let floor, music
+      let floor, music, audioBall
       var mesh;
+      var ambientLight;
 
       // To be synced
       var meshes = [];
@@ -92,13 +93,47 @@
       const sy = 0.5
       const sz = 0.5
 
+      // music audio
+      const listener = new THREE.AudioListener();
+      var sound = new THREE.Audio( listener );
+      const audioLoader = new THREE.AudioLoader();
+
+      var noise;
+      var context;
+      var src;
+      var analyser;
+      var bufferLength;
+      var dataArray;
+
+      var offline;
+      var bufferSource;
+      var scp;
+      var freqData;
+      var audio;
+
+
+      var lowerHalfArray;
+      var upperHalfArray;
+
+      var overallAvg;
+      var lowerMax;
+      var lowerAvg;
+      var upperMax;
+      var upperAvg;
+
+      var lowerMaxFr;
+      var lowerAvgFr;
+      var upperMaxFr;
+      var upperAvgFr;
+
+      var isMusicPlayed = false;
+      var isAnalyser = false;
+
+
       initThree()
       initCannon()
       initPointerLock()
       animate()
-
-      
-
 
       function initThree() {
         // Camera
@@ -118,15 +153,17 @@
 
         document.body.appendChild(renderer.domElement)
 
+
         // Stats.js
         stats = new Stats()
         document.body.appendChild(stats.dom)
 
         // Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2)
+        ambientLight = new THREE.AmbientLight(0xffffff, 0.2)
+        ambientLight.name = "ambientLight"
         scene.add(ambientLight)
 
-        const spotlight = new THREE.SpotLight(0xffffff, 0.7, 0, Math.PI / 4, 1)
+        const spotlight = new THREE.SpotLight(0xffffff, 1, 0, Math.PI / 4, 1)
         spotlight.position.set(10, 30, 20)
         spotlight.target.position.set(0, 0, 0)
 
@@ -135,6 +172,7 @@
         spotlight.shadow.camera.near = 20
         spotlight.shadow.camera.far = 50
         spotlight.shadow.camera.fov = 40
+        camera.add( listener );
 
         spotlight.shadow.bias = -0.001
         spotlight.shadow.mapSize.width = 2048
@@ -197,7 +235,16 @@
         // testBox.position.z = -30;
         // scene.add(testBox);
 
+        // audio visualizer
+        var icosahedronGeometry = new THREE.IcosahedronGeometry(10, 4);
+        var lambertMaterial = new THREE.MeshLambertMaterial({
+            color: 0xff00ee,
+            wireframe: true
+        });
 
+        audioBall = new THREE.Mesh(icosahedronGeometry, lambertMaterial);
+        audioBall.position.set(0, 15, 0);
+        scene.add(audioBall);
         window.addEventListener('resize', onWindowResize)
       }
 
@@ -248,8 +295,10 @@
         sphereBody.addShape(sphereShape)
         sphereBody.position.set(nx * sx * 0.5, ny * sy + radius * 2, nz * sz * 0.5)
         sphereBody.linearDamping = 0.9
+
         world.addBody(sphereBody)
         console.log("user start position", nx * sx * 0.5, ny * sy + radius * 2, nz * sz * 0.5);
+
 
         // Create the ground plane
         const groundShape = new CANNON.Plane()
@@ -271,6 +320,67 @@
         musicBody.position.x = 5
         musicBody.position.y = 3.5
         musicBody.position.z = -30
+
+        // collide music
+        musicBody.addEventListener('collide', (event) => {
+          audioLoader.load( './music/방탄소년단_Dynamite.mp3', function( buffer ) {
+            sound.setBuffer( buffer );
+            console.log('sound1', typeof sound);
+            sound.setLoop( true );
+            sound.setVolume( 0.5 );
+            sound.play();
+            isMusicPlayed = true;
+            console.log('play');
+            console.log('isMusicPlayed', isMusicPlayed);
+            // audio visualizer
+            // initialise simplex noise instance
+            noise = new SimplexNoise();
+            console.log('context start');
+            // context = new (window.AudioContext || window.webkitAudioContext)();
+            // src = context.createBufferSource();
+            // src.buffer = sound.buffer;
+            // console.log('sound buffer', sound.buffer);
+            // console.log('src buffer', src.buffer);
+            // analyser = await context.createAnalyser();
+            // analyser.minDecibels = -100;
+            // analyser.maxDecibels = -30;
+            // src.connect(analyser);
+            // await analyser.connect(context.destination);
+            // analyser.fftSize = 512;
+            // bufferLength = analyser.frequencyBinCount;
+            // console.log('frequencyBinCount', bufferLength);
+            // dataArray = new Uint8Array(bufferLength);
+            // // dataArray = new Float32Array(bufferLength);
+            // console.log('analyser', analyser);
+            // console.log('sound0', typeof sound);
+            isAnalyser = true;
+
+            offline = new OfflineAudioContext(2, buffer.length ,44100);
+            bufferSource = offline.createBufferSource();
+            bufferSource.buffer = buffer;
+
+            analyser = offline.createAnalyser();
+            scp = offline.createScriptProcessor(256, 0, 1);
+
+            bufferSource.connect(analyser);
+            scp.connect(offline.destination); // this is necessary for the script processor to start
+
+            freqData = new Uint8Array(analyser.frequencyBinCount);
+            scp.onaudioprocess = function(){
+              analyser.getByteFrequencyData(freqData);
+              // console.log(freqData);
+            };
+            bufferSource.start(0);
+            offline.oncomplete = function(e){
+              // console.log('analysed');
+            };
+            offline.startRendering();
+
+          }); 
+
+        });
+
+
         world.addBody(musicBody)
 
 
@@ -373,9 +483,50 @@
           instructions.style.display = null
         })
       }
+      
+      function removeEntity(object) {
+            var selectedObject = scene.getObjectByName(object.name);
+            scene.remove( selectedObject );
+          }
+          
+      function makeRoughBall(mesh, bassFr, treFr) {
+        mesh.geometry.vertices.forEach(function (vertex, i) {
+            var offset = mesh.geometry.parameters.radius;
+            var amp = 7;
+            var time = window.performance.now();
+            vertex.normalize();
+            var rf = 0.00001;
+            var distance = (offset + bassFr ) + noise.noise3D(vertex.x + time *rf*7, vertex.y +  time*rf*8, vertex.z + time*rf*9) * amp * treFr;
+            vertex.multiplyScalar(distance);
+        });
+        mesh.geometry.verticesNeedUpdate = true;
+        mesh.geometry.normalsNeedUpdate = true;
+        mesh.geometry.computeVertexNormals();
+        mesh.geometry.computeFaceNormals();
+      }
+
+      //some helper functions for audio visualizer here
+      function fractionate(val, minVal, maxVal) {
+          return (val - minVal)/(maxVal - minVal);
+      }
+
+      function modulate(val, minVal, maxVal, outMin, outMax) {
+          var fr = fractionate(val, minVal, maxVal);
+          var delta = outMax - outMin;
+          return outMin + (fr * delta);
+      }
+
+      function avg(arr){
+          var total = arr.reduce(function(sum, b) { return sum + b; });
+          return (total / arr.length);
+      }
+
+      function max(arr){
+          return arr.reduce(function(a, b){ return Math.max(a, b); })
+      }
+
 
       function animate() {
-        requestAnimationFrame(animate)
 
         const time = performance.now() / 1000
         const dt = time - lastCallTime
@@ -395,11 +546,44 @@
             boxMeshes[i].position.copy(voxels.boxes[i].position)
             boxMeshes[i].quaternion.copy(voxels.boxes[i].quaternion)
           }
+
+          // Update light
+          removeEntity(ambientLight)
+          ambientLight = new THREE.AmbientLight(0xffffff*Math.random(), 0.2)
+          ambientLight.name = "ambientLight"
+          scene.add(ambientLight)
+
+          
+          if(isMusicPlayed && isAnalyser){
+            // audio visualizer
+            // console.log('analyser2', analyser);
+            analyser.getByteFrequencyData(freqData);
+            // console.log('dataArray', dataArray);
+
+            lowerHalfArray = freqData.slice(0, (freqData.length/2) - 1);
+            upperHalfArray = freqData.slice((freqData.length/2) - 1, freqData.length - 1);
+
+            overallAvg = avg(freqData);
+            lowerMax = max(lowerHalfArray);
+            lowerAvg = avg(lowerHalfArray);
+            upperMax = max(upperHalfArray);
+            upperAvg = avg(upperHalfArray);
+
+            lowerMaxFr = lowerMax / lowerHalfArray.length;
+            lowerAvgFr = lowerAvg / lowerHalfArray.length;
+            upperMaxFr = upperMax / upperHalfArray.length;
+            upperAvgFr = upperAvg / upperHalfArray.length;
+            makeRoughBall(audioBall, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 1, 0, 4));
+          }
+          
         }
+
 
         controls.update(dt)
         renderer.render(scene, camera)
+        requestAnimationFrame(animate)
         stats.update()
+
       }
     </script>
   </body>
