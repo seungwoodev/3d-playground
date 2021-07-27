@@ -189,7 +189,7 @@
         // const width =  11.5;  
         // const height = 4.0;  
         // const depth = 1.0;  
-        // const testGeometry = new THREE.BoxGeometry(width, height, depth);
+        // const testGeometry = new THREE.BoxGeometry(width/2, height/2, depth/2);
         // const testBox = new THREE.Mesh(testGeometry, phongMaterial);
 
         // testBox.position.x = 5;
@@ -263,7 +263,7 @@
         const width =  11.5;  
         const height = 4.0;  
         const depth = 1.0;
-        const musicShape = new CANNON.Box(new CANNON.Vec3(width, height, depth))
+        const musicShape = new CANNON.Box(new CANNON.Vec3(width/2, height/2, depth/2))
         const musicBody = new CANNON.Body({ mass: 0 })
         const musicQuaternion = new CANNON.Quaternion();
         musicQuaternion.setFromAxisAngle(new CANNON.Vec3(0, 0, 1), 0)
