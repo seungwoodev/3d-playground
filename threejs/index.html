@@ -42,6 +42,7 @@
       <br />
       (W,A,S,D = Move, SPACE = Jump, MOUSE = Look, CLICK = Shoot)
     </div>
+    <script src="js/bunny.js"></script>
 
     <script type="module">
       import * as CANNON from './dist/cannon-es.js'
@@ -57,8 +58,12 @@
       // three.js variables
       let camera, scene, renderer, stats
       let material
-      let floor
-      let sphere, cube
+      let floor, music
+      var mesh;
+
+      // To be synced
+      var meshes = [];
+      var bodies = [];
 
       // cannon.js variables
       let world
@@ -66,7 +71,9 @@
       const timeStep = 1 / 60
       let lastCallTime = performance.now() / 1000
       let sphereShape
+      let musicShape
       let sphereBody
+      let musicBody
       let physicsMaterial
       let voxels
 
@@ -116,7 +123,7 @@
         document.body.appendChild(stats.dom)
 
         // Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.1)
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2)
         scene.add(ambientLight)
 
         const spotlight = new THREE.SpotLight(0xffffff, 0.7, 0, Math.PI / 4, 1)
@@ -144,6 +151,42 @@
         floor = new THREE.Mesh(floorGeometry, material)
         floor.receiveShadow = true
         scene.add(floor)
+
+        // Music text object
+        const loader = new THREE.FontLoader();
+
+        loader.load('https://threejsfundamentals.org/threejs/resources/threejs/fonts/helvetiker_regular.typeface.json', (font) => {
+          const text = 'Music';  
+
+          const musicGeometry = new THREE.TextGeometry(text, {
+            font: font,
+            size: 3,  
+
+            height: 0.2,  
+
+            curveSegments: 12,  
+
+            bevelEnabled: true,  
+            bevelThickness: 0.15,  
+
+            bevelSize: 0.3,  
+
+            bevelSegments: 5,  
+
+          });
+          const musicMaterial = new THREE.MeshPhongMaterial({ color: 0x97df5e });
+          music = new THREE.Mesh(musicGeometry, musicMaterial);
+          music.position.x = 0
+          music.position.y = 2
+          music.position.z = -30
+          scene.add(music);
+          console.log('music position x y z', music.position.x, music.position.y, music.position.z)
+
+        });
+
+        // // position test cylinder object
+        // const phongMaterial = new THREE.MeshPhongMaterial()
+        // testCylinderGeometry = new THREE.CylinderGeometry(0, 1, 0.5, 5),
 
         window.addEventListener('resize', onWindowResize)
       }
@@ -181,7 +224,7 @@
         // Create a slippery material (friction coefficient = 0.0)
         physicsMaterial = new CANNON.Material('physics')
         const physics_physics = new CANNON.ContactMaterial(physicsMaterial, physicsMaterial, {
-          friction: 0.0,
+          friction: 0.3,
           restitution: 0.3,
         })
 
@@ -196,6 +239,7 @@
         sphereBody.position.set(nx * sx * 0.5, ny * sy + radius * 2, nz * sz * 0.5)
         sphereBody.linearDamping = 0.9
         world.addBody(sphereBody)
+        console.log("user start position", nx * sx * 0.5, ny * sy + radius * 2, nz * sz * 0.5);
 
         // Create the ground plane
         const groundShape = new CANNON.Plane()
@@ -203,6 +247,19 @@
         groundBody.addShape(groundShape)
         groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0)
         world.addBody(groundBody)
+
+
+        // Music object apply physic
+        const musicShape = new CANNON.Cylinder(2, 10, 2, 3)
+        const musicBody = new CANNON.Body({ mass: 0 })
+        const musicQuaternion = new CANNON.Quaternion();
+        musicQuaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), 0)
+        musicBody.addShape(musicShape, new CANNON.Vec3(), musicQuaternion)
+        musicBody.position.x = 0
+        musicBody.position.y = 3
+        musicBody.position.z = -30
+        world.addBody(musicBody)
+
 
         // Voxels
         voxels = new VoxelLandscape(world, nx, ny, nz, sx, sy, sz)
@@ -282,6 +339,8 @@
           ballMesh.position.copy(ballBody.position)
         })
       }
+
+    
 
       function initPointerLock() {
         controls = new PointerLockControlsCannon(camera, sphereBody)
