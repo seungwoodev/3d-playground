@@ -184,9 +184,19 @@
 
         });
 
-        // // position test cylinder object
+        // // position test box object
         // const phongMaterial = new THREE.MeshPhongMaterial()
-        // testCylinderGeometry = new THREE.CylinderGeometry(0, 1, 0.5, 5),
+        // const width =  11.5;  
+        // const height = 4.0;  
+        // const depth = 1.0;  
+        // const testGeometry = new THREE.BoxGeometry(width, height, depth);
+        // const testBox = new THREE.Mesh(testGeometry, phongMaterial);
+
+        // testBox.position.x = 5;
+        // testBox.position.y = 3.5;
+        // testBox.position.z = -30;
+        // scene.add(testBox);
+
 
         window.addEventListener('resize', onWindowResize)
       }
@@ -250,13 +260,16 @@
 
 
         // Music object apply physic
-        const musicShape = new CANNON.Cylinder(2, 10, 2, 3)
+        const width =  11.5;  
+        const height = 4.0;  
+        const depth = 1.0;
+        const musicShape = new CANNON.Box(new CANNON.Vec3(width, height, depth))
         const musicBody = new CANNON.Body({ mass: 0 })
         const musicQuaternion = new CANNON.Quaternion();
-        musicQuaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), 0)
+        musicQuaternion.setFromAxisAngle(new CANNON.Vec3(0, 0, 1), 0)
         musicBody.addShape(musicShape, new CANNON.Vec3(), musicQuaternion)
-        musicBody.position.x = 0
-        musicBody.position.y = 3
+        musicBody.position.x = 5
+        musicBody.position.y = 3.5
         musicBody.position.z = -30
         world.addBody(musicBody)
 
