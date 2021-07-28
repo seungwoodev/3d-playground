@@ -61,6 +61,8 @@
       let floor, music, audioBall
       var mesh;
       var ambientLight;
+      var audioPointLight;
+      var spotLight;
 
       // To be synced
       var meshes = [];
@@ -163,22 +165,10 @@
         ambientLight.name = "ambientLight"
         scene.add(ambientLight)
 
-        const spotlight = new THREE.SpotLight(0xffffff, 1, 0, Math.PI / 4, 1)
-        spotlight.position.set(10, 30, 20)
-        spotlight.target.position.set(0, 0, 0)
+        var ambientLight2 = new THREE.AmbientLight(0xaaaaaa);
+        scene.add(ambientLight2);
 
-        spotlight.castShadow = true
-
-        spotlight.shadow.camera.near = 20
-        spotlight.shadow.camera.far = 50
-        spotlight.shadow.camera.fov = 40
-        camera.add( listener );
-
-        spotlight.shadow.bias = -0.001
-        spotlight.shadow.mapSize.width = 2048
-        spotlight.shadow.mapSize.height = 2048
-
-        scene.add(spotlight)
+      
 
         // Generic material
         material = new THREE.MeshLambertMaterial({ color: 0xdddddd })
@@ -245,6 +235,14 @@
         audioBall = new THREE.Mesh(icosahedronGeometry, lambertMaterial);
         audioBall.position.set(0, 15, 0);
         scene.add(audioBall);
+
+        spotLight = new THREE.SpotLight(0xffffff, 0.2);
+        spotLight.position.set(-10, 70, 20);
+        spotLight.lookAt(audioBall);
+        spotLight.castShadow = true;
+        spotLight.name = "spotLight";
+        scene.add(spotLight);
+        
         window.addEventListener('resize', onWindowResize)
       }
 
@@ -372,6 +370,7 @@
             };
             bufferSource.start(0);
             offline.oncomplete = function(e){
+              isMusicPlayed = false;
               // console.log('analysed');
             };
             offline.startRendering();
@@ -547,14 +546,24 @@
             boxMeshes[i].quaternion.copy(voxels.boxes[i].quaternion)
           }
 
-          // Update light
-          removeEntity(ambientLight)
-          ambientLight = new THREE.AmbientLight(0xffffff*Math.random(), 0.2)
-          ambientLight.name = "ambientLight"
-          scene.add(ambientLight)
 
           
           if(isMusicPlayed && isAnalyser){
+
+            // Update light
+            removeEntity(ambientLight)
+            ambientLight = new THREE.AmbientLight(0xffffff*Math.random(), 0.2)
+            ambientLight.name = "ambientLight"
+            scene.add(ambientLight)
+
+            removeEntity(spotLight);
+            spotLight = new THREE.SpotLight(0xffffff*Math.random(), 0.2);
+            spotLight.position.set(-10, 70, 20);
+            spotLight.lookAt(audioBall);
+            spotLight.castShadow = true;
+            spotLight.name = "spotLight";
+            scene.add(spotLight);
+
             // audio visualizer
             // console.log('analyser2', analyser);
             analyser.getByteFrequencyData(freqData);
