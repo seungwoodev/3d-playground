@@ -4,6 +4,7 @@
 * download or clone the project
 * unzip models/corona.gltf.zip file
 * run index.html file on the local server (e.g. vscode live server)
+* to optimze the audio visualizer, just delete other models or comment out from index.js file
 
 ## features
 * move and jump around the voxels and other obastacles
