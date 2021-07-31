@@ -16,3 +16,6 @@
 * corona virus
 * moonwalk girl
 * snowflake
+
+## caution
+* if fps is too low(about under 60), then audio visualizer sync could not work properly
