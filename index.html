@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cannon.js + three.js - voxel shooter</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <style>
+      #instructions {
+        position: fixed;
+        left: 0;
+        top: 0;
+
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #ffffff;
+        text-align: center;
+
+        cursor: pointer;
+      }
+      #instructions span {
+        font-size: 40px;
+      }
+    </style>
+    <script type="module">
+      import { addTitle, addSourceButton } from './js/dom-utils.js'
+
+      addTitle()
+      addSourceButton()
+    </script>
+
+  </head>
+  <body>
+    <div id="instructions">
+      <span>Click to play</span>
+      <br />
+      (W,A,S,D = Move, SPACE = Jump, MOUSE = Look, CLICK = Shoot)
+    </div>
+    <script type="module" src="./dist/main.js"> </script>
+  </body>
+</html>
