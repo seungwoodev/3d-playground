@@ -27,4 +27,4 @@
 ![스크린샷(10)](https://user-images.githubusercontent.com/65812107/135186572-ae4b055b-8252-475a-88f0-b0c02384c385.png)
 audio visualizer is not started
 ![스크린샷(11)](https://user-images.githubusercontent.com/65812107/135186577-b470c8b6-297e-43cd-9022-ff90eb896557.png)
-after the music starts, audio visualizer starts to change its 
+after the music starts, audio visualizer starts to change its shape
