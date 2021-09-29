@@ -23,8 +23,8 @@
 * if fps is too low(about under 60), then audio visualizer could not work properly(sync not matched)
 
 ## play screenshots
-![스크린샷(9)](https://user-images.githubusercontent.com/65812107/135186568-8ecb95ce-4f80-48ae-b7fa-5f8e5d75e0c1.png)
-![스크린샷(10)](https://user-images.githubusercontent.com/65812107/135186572-ae4b055b-8252-475a-88f0-b0c02384c385.png)
-audio visualizer is not started
-![스크린샷(11)](https://user-images.githubusercontent.com/65812107/135186577-b470c8b6-297e-43cd-9022-ff90eb896557.png)
+![스크린샷(9)](https://user-images.githubusercontent.com/65812107/135186928-a9f64d90-82ad-4fcc-a4a3-fdb2c0f4fcb2.png)
+![스크린샷(10)](https://user-images.githubusercontent.com/65812107/135186934-2ebfcc4c-f629-4866-b95b-4e3506a406d3.png)
+audio visualizer is not started yet
+![스크린샷(11)](https://user-images.githubusercontent.com/65812107/135186937-9592b4e9-7495-4c16-a460-05b1a581c04b.png)
 after the music starts, audio visualizer starts to change its shape
