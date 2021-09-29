@@ -1,5 +1,5 @@
 # 3D-playground
-
+3D web playground to enjoy
 ## usage
 * download or clone the project
 * unzip models/corona.gltf.zip file
