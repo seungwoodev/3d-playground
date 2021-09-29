@@ -27,4 +27,4 @@
 ![스크린샷(11)](https://user-images.githubusercontent.com/65812107/135186937-9592b4e9-7495-4c16-a460-05b1a581c04b.png)
 -> audio visualizer is not started yet
 ![스크린샷(10)](https://user-images.githubusercontent.com/65812107/135186934-2ebfcc4c-f629-4866-b95b-4e3506a406d3.png)
--> after the music starts, audio visualizer starts to change its shape
+-> after the music starts, audio visualizer starts to change its shape based on the music's frequency
