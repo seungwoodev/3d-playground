@@ -14,7 +14,7 @@
 * lights
 * audio visualizer
 * moving ships
-* t-rex dinosaur
+* t-rex dinosaur that never lies down
 * (optional) corona virus
 * moonwalk girl
 * snowflake comes down
@@ -29,5 +29,5 @@
 ![스크린샷(10)](https://user-images.githubusercontent.com/65812107/135186934-2ebfcc4c-f629-4866-b95b-4e3506a406d3.png)
 -> after the music starts, audio visualizer starts to change its shape based on the music's frequency
 
-## Never lie down?
+## Tips
 ### Shoot the ball at the dinosaur and try to guess! What will happen?
