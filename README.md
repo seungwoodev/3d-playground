@@ -23,10 +23,10 @@
 * if fps is too low(about under 60), then audio visualizer could not work properly(sync not matched)
 
 ## play screenshots
-![스크린샷(9)](https://user-images.githubusercontent.com/65812107/135186928-a9f64d90-82ad-4fcc-a4a3-fdb2c0f4fcb2.png)
-![스크린샷(11)](https://user-images.githubusercontent.com/65812107/135186937-9592b4e9-7495-4c16-a460-05b1a581c04b.png)
 ![스크린샷(18)](https://user-images.githubusercontent.com/65812107/135218168-de6d3507-e8d7-4ab7-8f85-20bac10fbfd3.png)
 ![스크린샷(19)](https://user-images.githubusercontent.com/65812107/135218180-03afea82-6f12-46bc-a09e-dcac07aa4b1a.png)
+![스크린샷(9)](https://user-images.githubusercontent.com/65812107/135186928-a9f64d90-82ad-4fcc-a4a3-fdb2c0f4fcb2.png)
+![스크린샷(11)](https://user-images.githubusercontent.com/65812107/135186937-9592b4e9-7495-4c16-a460-05b1a581c04b.png)
 ### Audio visualizer is not started yet
 ![스크린샷(10)](https://user-images.githubusercontent.com/65812107/135186934-2ebfcc4c-f629-4866-b95b-4e3506a406d3.png)
 ### After the music starts, audio visualizer starts to change its shape based on the music's frequency
