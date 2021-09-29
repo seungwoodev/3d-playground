@@ -35,4 +35,4 @@
 ### Shoot the ball at the dinosaur! What will happen?
 ![ezgif-3-a9f120203182](https://user-images.githubusercontent.com/65812107/135188726-3f426658-9bd4-4a89-a6af-9b9a5df30332.gif)
 ### Change the music you want
-#### current music is 'Butter' by BTS
+* initial music is 'Butter' by BTS
