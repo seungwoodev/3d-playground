@@ -3,7 +3,8 @@
 ## usage
 * download or clone the project
 * unzip models/corona.gltf.zip file
-* run index.html file on the local server (e.g. vscode live server)
+* (optional) install live server from vscode extension
+* open index.html file on the local server (e.g. using vscode live server)
 * to optimze the audio visualizer, just delete other models or comment out from index.js file
 
 ## features
