@@ -13,11 +13,11 @@
 * hit the music text then start the music
 * lights
 * audio visualizer
-* ship
+* moving ship
 * t-rex dinosaur
-* corona virus
+* (optional) corona virus
 * moonwalk girl
-* snowflake
+* snowflake comes down
 
 ## caution
 * if fps is too low(about under 60), then audio visualizer could not work properly(sync not matched)
