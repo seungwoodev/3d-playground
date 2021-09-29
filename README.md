@@ -30,5 +30,7 @@
 -> after the music starts, audio visualizer starts to change its shape based on the music's frequency
 ![ezgif-3-271243bd058f](https://user-images.githubusercontent.com/65812107/135188605-b59e5cc3-84e4-4bb9-83cd-8d71a7b0855c.gif)
 
+
 ## Tips
 ### Shoot the ball at the dinosaur and try to guess! What will happen?
+![ezgif-3-a9f120203182](https://user-images.githubusercontent.com/65812107/135188726-3f426658-9bd4-4a89-a6af-9b9a5df30332.gif)
