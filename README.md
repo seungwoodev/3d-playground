@@ -1,13 +1,13 @@
 # 3D-playground
 3D web playground to enjoy
-## usage
+## Usage
 * download or clone the project
 * unzip models/corona.gltf.zip file
 * (optional) install live server from vscode extension
 * open index.html file on the local server (e.g. using vscode live server)
 * to optimze the audio visualizer, just delete other models or comment out from index.js file
 
-## features
+## Features
 * move and jump around the voxels and other obastacles
 * shoot the ball
 * hit the music text then start the music
@@ -19,10 +19,10 @@
 * moonwalk girl
 * snowflake comes down
 
-## caution
+## Caution
 * if fps is too low(about under 60), then audio visualizer could not work properly(sync not matched)
 
-## play screenshots
+## Play screenshots
 ![스크린샷(9)](https://user-images.githubusercontent.com/65812107/135186928-a9f64d90-82ad-4fcc-a4a3-fdb2c0f4fcb2.png)
 ![스크린샷(11)](https://user-images.githubusercontent.com/65812107/135186937-9592b4e9-7495-4c16-a460-05b1a581c04b.png)
 ### Audio visualizer is not started yet
